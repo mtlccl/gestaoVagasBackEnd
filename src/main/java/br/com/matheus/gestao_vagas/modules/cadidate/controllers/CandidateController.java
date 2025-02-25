@@ -1,5 +1,6 @@
 package br.com.matheus.gestao_vagas.modules.cadidate.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.matheus.gestao_vagas.modules.cadidate.CandidateEntity;
 import br.com.matheus.gestao_vagas.modules.cadidate.useCases.CreateCandidateUseCases;
+import br.com.matheus.gestao_vagas.modules.cadidate.useCases.ListAllJobsByFilterUseCase;
 import br.com.matheus.gestao_vagas.modules.cadidate.useCases.ProfileCandidateUseCase;
+import br.com.matheus.gestao_vagas.modules.company.entitys.JobEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -25,6 +31,9 @@ public class CandidateController {
 
   @Autowired
   private ProfileCandidateUseCase profileCandidateUseCase;
+
+  @Autowired
+  private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
 
   @PostMapping("/")
   public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity) {
@@ -50,4 +59,12 @@ public class CandidateController {
     }
   }
 
+
+  @GetMapping("/job")
+  @PreAuthorize("hasRole('CANDIDATE')")
+  @Tag(name = "candidato", description = "informacoes do candidato")
+  @Operation(summary = "Listagem de vagas disponiveis para o candidato", description = "lista de vagas")
+  public List<JobEntity> findJobByFilter(@RequestParam String filter){
+      return this.listAllJobsByFilterUseCase.execute(filter);
+  }
 }
