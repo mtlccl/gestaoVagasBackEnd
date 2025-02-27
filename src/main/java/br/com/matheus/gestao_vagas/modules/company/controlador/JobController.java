@@ -13,7 +13,6 @@ import br.com.matheus.gestao_vagas.modules.company.dto.CreatedJobDTO;
 import br.com.matheus.gestao_vagas.modules.company.entitys.JobEntity;
 import br.com.matheus.gestao_vagas.modules.company.useCases.CreateTrabalhoCasosUsar;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
