@@ -23,7 +23,8 @@ public class SecurityConfig {
   private static final String[] swaggerList = {
     "/swagger-ui/**",
     "/v3/api-docs/**",
-    "/swagger-resources/**"
+    "/swagger-resources/**",
+    "/actuator/**"
   };
 
   @Bean
