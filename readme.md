@@ -34,3 +34,26 @@ A aplicação estará disponível em http://localhost:8081.
 
 
 >Importante: Certifique-se de não enviar alterações para a branch main no GitHub, pois isso pode causar a interrupção do site hospedado no Render. Sempre trabalhe em uma branch separada e valide as mudanças antes de realizar qualquer merge.
+
+## config padrao deploy para o banco
+
+
+            - name: Build project
+              run: mvn clean install
+            - name: Login docker
+              run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+            - name: Build docker image
+              run: docker build -t rocketseat-education/gestao_vagas .
+            - name: Publish image
+              run: docker push rocketseat-education/gestao_vagas
+    deploy:
+        needs: build
+        runs-on: self-hosted
+        steps:
+            - name: Pull image docker hub 
+              run: docker pull rocketseat-education/gestao_vagas:latest
+            - name:  remove container
+              run: docker rm -f gestao-vagas
+            - name: Run docker container gestao-vagas
+              run: docker run -d -p 8080:8080 -e DATABASE_URL=${{secrets.DATABASE_URL}} -e DATABASE_PASSWORD='${{secrets.DATABASE_PASSWORD}}' -e DATABASE_USERNAME=${{secrets.DATABASE_USERNAME}} -e DATABASE_NAME=${{secrets.DATABASE_NAME}} --name gestao-vagas rocketseat-education/gestao_vagas
+              
